@@ -34,7 +34,7 @@ type Runner struct {
 	Command *cobra.Command
 	ctx     context.Context
 	errChan chan error
-	local bool
+	local   bool
 }
 
 func (r *Runner) prerunE(c *cobra.Command, args []string) error {
@@ -44,6 +44,7 @@ func (r *Runner) prerunE(c *cobra.Command, args []string) error {
 func (r *Runner) runE(c *cobra.Command, args []string) error {
 	cfg := grpcserver.Config{
 		Address: ":8888",
+		CertDir: "/certs",
 	}
 	if r.local {
 		cfg.CertDir = "certs"

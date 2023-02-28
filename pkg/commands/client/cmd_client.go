@@ -2,6 +2,9 @@ package client
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"strings"
 
 	"github.com/henderiw/mtls/pkg/grpcclient"
 	"github.com/spf13/cobra"
@@ -44,9 +47,11 @@ func (r *Runner) prerunE(c *cobra.Command, args []string) error {
 
 func (r *Runner) runE(c *cobra.Command, args []string) error {
 	cfg := grpcclient.Config{
-		Address: "localhost:8888",
+		Address: fmt.Sprintf("%s:%s", strings.Join([]string{"mtls-server-service", os.Getenv("POD_NAMESPACE"), "svc.cluster.local"}, "."), "8888"),
+		CertDir: "/certs",
 	}
 	if r.local {
+		cfg.Address = "127.0.0.1:8888"
 		cfg.CertDir = "certs"
 		cfg.CertName = "client.crt"
 		cfg.KeyName = "client.key"

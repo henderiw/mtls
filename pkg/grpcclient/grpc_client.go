@@ -60,25 +60,30 @@ func (r *grpcClient) Start(ctx context.Context) error {
 		r.l.Error(err, "cannot create tls config")
 		return err
 	}
+	
+
+	r.l.Info("grpc client info", "tlsConfig", tlsConfig)
+	r.l.Info("grpc client info", "address", r.config.Address)
 	conn, err := grpc.Dial(r.config.Address, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
 	if err != nil {
 		r.l.Error(err, "cannot create grpc connection")
 		return err
 	}
-	defer conn.Close()
+	//defer conn.Close()
 
 	client := greeterpb.NewGreeterServiceClient(conn)
 
 	for {
+		time.Sleep(5 * time.Second)
+
 		resp, err := client.Hello(ctx, &greeterpb.HelloRequest{
 			Name: "wim",
 		})
+
 		if err != nil {
 			r.l.Error(err, "cannot get greeter response")
-			return err
+		} else {
+			r.l.Info("hello", "resp", resp.Msg)
 		}
-		r.l.Info("hello", "resp", resp.Msg)
-
-		time.Sleep(5 * time.Second)
 	}
 }

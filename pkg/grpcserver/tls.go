@@ -34,11 +34,11 @@ func (r *grpcServer) serverOpts(ctx context.Context) ([]grpc.ServerOption, error
 }
 
 func (r *grpcServer) createTLSConfig(ctx context.Context) (*tls.Config, error) {
-	caPath := filepath.Join(r.config.CertDir, r.config.CaName)
-	certPath := filepath.Join(r.config.CertDir, r.config.CertName)
-	keyPath := filepath.Join(r.config.CertDir, r.config.KeyName)
+	caFile := filepath.Join(r.config.CertDir, r.config.CaName)
+	certFile := filepath.Join(r.config.CertDir, r.config.CertName)
+	keyFile := filepath.Join(r.config.CertDir, r.config.KeyName)
 
-	ca, err := os.ReadFile(caPath)
+	ca, err := os.ReadFile(caFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read client CA cert: %w", err)
 	}
@@ -48,7 +48,7 @@ func (r *grpcServer) createTLSConfig(ctx context.Context) (*tls.Config, error) {
 		return nil, fmt.Errorf("cannot add ca cert to the ca pool")
 	}
 
-	certWatcher, err := certwatcher.New(certPath, keyPath)
+	certWatcher, err := certwatcher.New(certFile, keyFile)
 	if err != nil {
 		return nil, err
 	}
