@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package service;
+
+
+option go_package = "github.com/henderiw/mtls/apis/greeter/greeterpb";
+
+service GreeterService {
+  rpc Hello(HelloRequest) returns (HelloResponse) {}
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string msg = 1;
+}
