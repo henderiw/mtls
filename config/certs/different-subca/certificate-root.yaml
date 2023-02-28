@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: root-certificate
+  namespace: proxy
+spec:
+  isCA: true
+  secretName: root-certificate
+  commonName: "Root Certificate"
+  privateKey:
+    algorithm: RSA
+    size: 4096
+    encoding: PKCS8
+  issuerRef:
+    name: proxy-issuer
+    kind: Issuer

@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: server-certificate
+  namespace: proxy
+spec:
+  secretName: server-certificate
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 4096
+  commonName: "server"
+  usages:
+    - server auth
+    - key encipherment
+    - digital signature
+  issuerRef:
+    name: server-issuer
+    kind: Issuer
+  dnsNames:
+  - mtls-server-service.proxy.svc.cluster.local
