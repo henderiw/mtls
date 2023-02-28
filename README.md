@@ -2,6 +2,54 @@
 
 provides an example on how to enable mTLS between a client and server using a GRPC greeter service
 
+## use
+
+## standalone
+
+start the server
+
+```
+go run *.go server --local
+```
+
+start the client
+
+```
+go run *.go client --local
+```
+
+### kubernetes
+
+install cert manager
+
+```
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
+```
+
+create a proxy namespace
+
+```
+kubectl create ns proxy
+```
+
+deploy the cert/issuer infrastructure
+
+```
+kubectl apply -f config/certs/single-subca
+```
+
+deploy the server app
+
+```
+kubectl apply -f config/server
+```
+
+deploy the client app
+
+```
+kubectl apply -f config/client
+```
+
 ## server
 
 uses the cert watcher to check for new CERTs.
