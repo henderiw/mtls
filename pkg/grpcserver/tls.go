@@ -11,7 +11,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/peer"
 	"sigs.k8s.io/controller-runtime/pkg/certwatcher"
 )
 
@@ -28,7 +27,7 @@ func (r *grpcServer) serverOpts(ctx context.Context) ([]grpc.ServerOption, error
 	}
 	return []grpc.ServerOption{
 		grpc.Creds(credentials.NewTLS(tlsConfig)),
-		grpc.UnaryInterceptor(r.middleFunc), //mtls
+		//grpc.UnaryInterceptor(r.middleFunc), //mtls
 	}, nil
 
 }
@@ -63,11 +62,12 @@ func (r *grpcServer) createTLSConfig(ctx context.Context) (*tls.Config, error) {
 		GetCertificate: certWatcher.GetCertificate,
 		ClientAuth:     tls.RequireAndVerifyClientCert, // mtls
 		ClientCAs:      caPool,                         // mtls
-		//RootCAs: caPool, // regular tls
+		RootCAs:        caPool,                         // regular tls
 	}
 	return tlsConfig, nil
 }
 
+/*
 func (r *grpcServer) middleFunc(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 	// get client tls info
 	if p, ok := peer.FromContext(ctx); ok {
@@ -79,3 +79,4 @@ func (r *grpcServer) middleFunc(ctx context.Context, req interface{}, info *grpc
 	}
 	return handler(ctx, req)
 }
+*/
